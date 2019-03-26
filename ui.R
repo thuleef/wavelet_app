@@ -1,18 +1,28 @@
 #UI
 library(shiny)
-sensors <- read.csv('sensors.csv')
+#sensors <- read.csv('sensors.csv')
+Station_Name <- c("Beijing", "Guangzhou", "Urumqi")
+Variable_Name <- c("Precipitation", "Mean_Temperature", "Max_Temperature", "Min_Temperature")
 
 fluidPage(fluidRow(
+  br(),
   column(4,
          wellPanel(
            h4('Data Series'),
            selectInput(
              inputId = 'station',
              label = 'Station',
-             choices = unique(sensors$Station)
+             choices = Station_Name
            ),
-           uiOutput('sensor'),
-           actionButton(inputId = 'submit.series', label = 'Select'), br(),br(),uiOutput('daterange')
+           selectInput(
+             inputId = 'variable',
+             label = 'Variable',
+             choices = Variable_Name
+           ),
+           actionButton(inputId = 'submit.series', label = 'Select'),
+           br(),
+           br(),
+           uiOutput('daterange')
          )),
   column(4,
          wellPanel(
@@ -37,8 +47,7 @@ fluidPage(fluidRow(
            ),
            actionButton(inputId = 'submit.filter', label = 'Filter')
          )),
-  column(
-    4,
+  column(4,
     wellPanel(
       h4('Changepoint(s)'),
       numericInput(
@@ -48,7 +57,9 @@ fluidPage(fluidRow(
         min = 0
       ),
       checkboxInput(inputId = 'dispcpts', label = 'Display changepoint(s) on graphs.'),
-      actionButton(inputId = 'submit.cpts', label = 'Find'), br(), h5('Location(s)'),
+      actionButton(inputId = 'submit.cpts', label = 'Find'),
+      br(),
+      h5('Location(s)'),
       verbatimTextOutput('changepoint')
     )
   )
